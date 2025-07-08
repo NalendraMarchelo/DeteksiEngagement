@@ -1,0 +1,57 @@
+# =================================================================
+# Gitignore untuk Proyek Deteksi Engagement Python
+# =================================================================
+
+# 1. Dataset dan Data Hasil Proses
+# ---------------------------------
+# Abaikan folder dataset DAiSEE yang sangat besar.
+data/DAiSEE/
+
+# Abaikan frame video, wajah yang terdeteksi, dan hasil prediksi.
+# Direktori ini bisa menjadi sangat besar dan tidak perlu dilacak.
+data/frames/
+data/processed/
+data/results/
+data/temp/
+
+# 2. Model yang Telah Dilatih
+# ---------------------------
+# Model yang disimpan (file .h5, .keras, dll.) biasanya besar dan
+# merupakan hasil dari kode, bukan kode itu sendiri.
+models/
+*.h5
+*.keras
+
+# 3. Virtual Environment Python
+# -----------------------------
+# Folder virtual environment berisi banyak library dan tidak boleh
+# dimasukkan ke version control.
+.venv/
+venv/
+env/
+ENV/
+
+# 4. File Generated oleh Python & Cache
+# -------------------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+
+# 5. File Konfigurasi IDE dan Editor
+# ----------------------------------
+.vscode/
+.idea/
+
+# 6. File Generated oleh Sistem Operasi
+# -------------------------------------
+.DS_Store
+Thumbs.db
+
+# 7. Pengecualian (Opsional tapi Direkomendasikan)
+# ---------------------------------------------
+# Jangan abaikan file README.md di dalam folder yang diabaikan.
+# Ini berguna untuk memberi instruksi (misalnya, cara men-download data).
+!**/README.md
