@@ -26,6 +26,7 @@ models/
 # -----------------------------
 # Folder virtual environment berisi banyak library dan tidak boleh
 # dimasukkan ke version control.
+.venv-gpu
 .venv/
 venv/
 env/

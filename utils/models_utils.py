@@ -12,8 +12,11 @@ from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 from sklearn.utils.class_weight import compute_class_weight
 
-
 def build_engagement_model(input_shape=(224, 224, 3), fine_tune_at=100, num_classes=4):
+    """
+    Membangun model klasifikasi engagement menggunakan EfficientNetB0 sebagai base model.
+    Fungsi ini tidak berubah.
+    """
     base_model = EfficientNetB0(weights='imagenet', include_top=False, input_shape=input_shape)
     base_model.trainable = True
     for layer in base_model.layers[:fine_tune_at]:
@@ -23,27 +26,36 @@ def build_engagement_model(input_shape=(224, 224, 3), fine_tune_at=100, num_clas
     x = GlobalAveragePooling2D()(x)
     x = Dense(256, activation='relu')(x)
     x = Dropout(0.5)(x)
-    output = Dense(num_classes, activation='softmax', name='confusion_output')(x)
+    output = Dense(num_classes, activation='softmax', name='engagement_output')(x)
 
     model = Model(inputs=base_model.input, outputs=output)
-    model.compile(optimizer=Adam(learning_rate=1e-5), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=Adam(learning_rate=1e-4), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     return model
 
 
-def train_model(model, X_train, y_train, X_val, y_val, train_datagen, batch_size=32, epochs=10, user_id="user_001"):
-    os.makedirs(f"models/{user_id}", exist_ok=True)
+def train_model(model, X_train, y_train, X_val, y_val, train_datagen, batch_size=32, epochs=10):
+    """
+    Melatih model dengan data yang diberikan.
+    Menghapus `user_id` dan path yang di-hardcode.
+    """
+    # Menentukan path penyimpanan model terbaik secara umum di folder 'models'
+    model_dir = "models"
+    os.makedirs(model_dir, exist_ok=True)
+    best_model_path = os.path.join(model_dir, 'best_model.keras')
 
-    # Hitung class weight otomatis berdasarkan distribusi label
+    # Hitung class weight untuk menangani data yang tidak seimbang
     class_weights = compute_class_weight(
         class_weight='balanced',
         classes=np.unique(y_train),
         y=y_train
     )
     class_weights_dict = dict(enumerate(class_weights))
+    print(f"Menggunakan Class Weights: {class_weights_dict}")
 
+    # Callbacks untuk menyimpan model terbaik dan menghentikan training lebih awal
     callbacks = [
         ModelCheckpoint(
-            filepath=f'models/{user_id}/confusion_model.keras',
+            filepath=best_model_path,
             monitor='val_loss',
             save_best_only=True,
             verbose=1
@@ -71,59 +83,61 @@ def train_model(model, X_train, y_train, X_val, y_val, train_datagen, batch_size
     return history
 
 
-def predict_engagement(model, frames):
-    preds = model.predict(frames, verbose=0)
-    avg_confusion_level = float(np.mean(np.argmax(preds, axis=1)))
-    return {'confusion_level': avg_confusion_level}
-
-
-def plot_training_history(history, user_id="user_001"):
+def plot_training_history(history, save_path: str):
+    """
+    Membuat plot loss dan accuracy dari history training dan menyimpannya ke file.
+    """
     plt.figure(figsize=(12, 5))
 
+    # Plot Loss
     plt.subplot(1, 2, 1)
     plt.plot(history.history['loss'], label='Train Loss')
     plt.plot(history.history['val_loss'], label='Val Loss')
-    plt.title('Model Loss (Confusion Level)')
+    plt.title('Model Loss')
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.legend()
     plt.grid(True)
 
+    # Plot Accuracy
     plt.subplot(1, 2, 2)
     plt.plot(history.history['accuracy'], label='Train Accuracy')
     plt.plot(history.history['val_accuracy'], label='Val Accuracy')
-    plt.title('Model Accuracy (Confusion Level)')
+    plt.title('Model Accuracy')
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy')
     plt.legend()
     plt.grid(True)
 
     plt.tight_layout()
-    output_dir = f"data/results/{user_id}"
-    os.makedirs(output_dir, exist_ok=True)
-    plt.savefig(f"{output_dir}/training_history.png")
+    plt.savefig(save_path)
     plt.close()
-    print(f"Training history saved to {output_dir}/training_history.png")
+    print(f"Plot history training disimpan di: {save_path}")
 
 
-def plot_confusion_matrix(cm, user_id="user_001", class_names=None):
+def plot_confusion_matrix(cm, save_path: str, class_names=None):
+    """
+    Membuat plot confusion matrix dan menyimpannya ke file.
+    """
     if class_names is None:
-        class_names = ["0", "1", "2", "3"]
+        class_names = [str(i) for i in range(cm.shape[0])]
 
-    plt.figure(figsize=(6, 5))
+    plt.figure(figsize=(8, 6))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=class_names, yticklabels=class_names)
     plt.title("Confusion Matrix")
-    plt.xlabel("Predicted")
-    plt.ylabel("Actual")
-    output_dir = f"data/results/{user_id}"
-    os.makedirs(output_dir, exist_ok=True)
-    plt.savefig(os.path.join(output_dir, "confusion_matrix.png"))
+    plt.xlabel("Predicted Label")
+    plt.ylabel("True Label")
+    
+    plt.savefig(save_path)
     plt.close()
-    print(f"Confusion matrix saved to {output_dir}/confusion_matrix.png")
+    print(f"Plot confusion matrix disimpan di: {save_path}")
 
 
-def evaluate_model_metrics(model, X_test, y_true, user_id="user_001"):
-    print(f"\n--- Evaluating Model on Validation Data (User: {user_id}) ---")
+def evaluate_model_metrics(model, X_test, y_true, save_path: str):
+    """
+    Mengevaluasi model pada data tes, mencetak, dan menyimpan metrik.
+    """
+    print("\n--- Mengevaluasi Model pada Data Uji ---")
 
     y_pred_probs = model.predict(X_test, verbose=0)
     y_pred = np.argmax(y_pred_probs, axis=1)
@@ -134,49 +148,21 @@ def evaluate_model_metrics(model, X_test, y_true, user_id="user_001"):
     f1 = f1_score(y_true, y_pred, average='macro', zero_division=0)
     cm = confusion_matrix(y_true, y_pred)
 
-    print(f"Accuracy: {accuracy:.4f}")
-    print(f"Precision (macro): {precision:.4f}")
-    print(f"Recall (macro): {recall:.4f}")
-    print(f"F1-Score (macro): {f1:.4f}")
-    print("\nConfusion Matrix:")
-    print(cm)
+    # Mencetak metrik ke konsol
+    metrics_summary = (
+        f"Akurasi: {accuracy:.4f}\n"
+        f"Presisi (macro): {precision:.4f}\n"
+        f"Recall (macro): {recall:.4f}\n"
+        f"F1-Score (macro): {f1:.4f}\n\n"
+        f"Confusion Matrix:\n{cm}"
+    )
+    print(metrics_summary)
 
-    metrics_results = {
-        "user_id": user_id,
-        "accuracy": accuracy,
-        "precision_macro": precision,
-        "recall_macro": recall,
-        "f1_score_macro": f1,
-        "confusion_matrix": cm.tolist()
-    }
+    # Menyimpan metrik ke file teks
+    with open(save_path, "w") as f:
+        f.write(metrics_summary)
+    print(f"Hasil evaluasi disimpan di: {save_path}")
 
-    output_dir = f"data/results/{user_id}"
-    os.makedirs(output_dir, exist_ok=True)
-    metrics_file = os.path.join(output_dir, "evaluation_metrics.json")
-    with open(metrics_file, "w") as f:
-        json.dump(metrics_results, f, indent=2)
-    print(f"Evaluation metrics saved to {metrics_file}")
-
-    plot_confusion_matrix(cm, user_id=user_id)
-
-
-def predict_and_save_results(model, user_frames, user_id="user_001"):
-    print("\n=== Predicting Confusion Level on User Video ===")
-    predictions = predict_engagement(model, user_frames)
-
-    results = {
-        "user_id": user_id,
-        "confusion_level_avg": predictions['confusion_level']
-    }
-
-    output_dir = f"data/results/{user_id}"
-    os.makedirs(output_dir, exist_ok=True)
-    results_file = os.path.join(output_dir, "user_prediction_results.json")
-
-    with open(results_file, "w") as f:
-        json.dump(results, f, indent=2)
-
-    print(f"User video prediction results saved to {results_file}:")
-    print(json.dumps(results, indent=2))
-
-    return results
+    # Menyimpan plot confusion matrix
+    cm_plot_path = save_path.replace('.txt', '_confusion_matrix.png')
+    plot_confusion_matrix(cm, save_path=cm_plot_path)

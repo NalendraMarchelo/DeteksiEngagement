@@ -1,0 +1,10 @@
+Akurasi: 0.2183
+Presisi (macro): 0.0546
+Recall (macro): 0.2500
+F1-Score (macro): 0.0896
+
+Confusion Matrix:
+[[  0 667   0   0]
+ [  0 212   0   0]
+ [  0  80   0   0]
+ [  0  12   0   0]]
