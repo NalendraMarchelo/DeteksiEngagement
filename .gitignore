@@ -55,4 +55,4 @@ Thumbs.db
 # ---------------------------------------------
 # Jangan abaikan file README.md di dalam folder yang diabaikan.
 # Ini berguna untuk memberi instruksi (misalnya, cara men-download data).
-!**/README.md
+!**/README.md.venv-gpu/
