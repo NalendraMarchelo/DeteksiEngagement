@@ -15,7 +15,7 @@ warnings.filterwarnings('ignore')
 
 # --- KONFIGURASI ---
 # Path sekarang mengarah ke dalam folder 'data'
-DATA_PATH = os.path.join("data", "features_geometric.csv")
+DATA_PATH = os.path.join("data", "features_rich.csv")
 MODEL_OUTPUT_NAME = "boredom_geometric_model.joblib"
 
 def main():
@@ -35,7 +35,7 @@ def main():
     print(df['label'].value_counts(normalize=True).mul(100).round(2).astype(str) + '%')
 
     # 2. Persiapan Data
-    X = df[['ear', 'mar']]
+    X = df[['ear', 'mar', 'pitch', 'yaw', 'roll', 'eyebrow_dist', 'nose_mouth_dist']] # Gunakan semua fitur
     y = df['label']
 
     X_train, X_test, y_train, y_test = train_test_split(
