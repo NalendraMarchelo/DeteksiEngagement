@@ -8,16 +8,15 @@ import os
 from scipy.spatial import distance as dist
 from tqdm import tqdm
 
-# --- FUNGSI PEMBANTU ---
 def calculate_ear(eye):
-    """Menghitung Eye Aspect Ratio (EAR)."""
+    #Menghitung Eye Aspect Ratio (EAR)
     A = dist.euclidean(eye[1], eye[5])
     B = dist.euclidean(eye[2], eye[4])
     C = dist.euclidean(eye[0], eye[3])
     return (A + B) / (2.0 * C) if C > 0 else 0.0
 
 def calculate_mar(mouth):
-    """Menghitung Mouth Aspect Ratio (MAR)."""
+    #Menghitung Mouth Aspect Ratio (MAR)
     A = dist.euclidean(mouth[2], mouth[3])
     B = dist.euclidean(mouth[0], mouth[1])
     return A / B if B > 0 else 0.0
@@ -30,13 +29,13 @@ def main():
 
     data_dir = "data/DAiSEE/Frames/Train"
     labels_file = "data/DAiSEE/Labels/TrainLabels.csv"
-    output_csv_path = os.path.join("data", "features_rich.csv") # Nama file output
+    output_csv_path = os.path.join("data", "features_rich.csv")
 
     labels_df = pd.read_csv(labels_file)
     labels_df.columns = [col.strip() for col in labels_df.columns]
     labels_df["ClipID_clean"] = labels_df["ClipID"].str.replace(r"\.\w+$", "", regex=True)
 
-    # Indeks landmark yang dibutuhkan
+    # Indeks landmark
     EYE_LANDMARKS_LEFT = [362, 385, 387, 263, 373, 380]
     EYE_LANDMARKS_RIGHT = [33, 160, 158, 133, 153, 144]
     MOUTH_LANDMARKS = [61, 291, 0, 17]
