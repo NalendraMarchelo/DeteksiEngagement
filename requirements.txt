@@ -1,10 +1,22 @@
-tensorflow>=2.0
-opencv-python
+# --- Core & Data Manipulation ---
 pandas
 numpy
-matplotlib
-scikit-learn
+scipy
+
+# --- Image & Video Processing ---
+opencv-python
 mediapipe
+
+# --- Machine Learning & Modeling ---
+scikit-learn
+imbalanced-learn
+xgboost
+joblib
+
+# --- Visualization & UI ---
+matplotlib
+seaborn
 gradio
+
+# --- Utility ---
 tqdm
-python-dotenv
