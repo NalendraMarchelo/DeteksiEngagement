@@ -1,0 +1,63 @@
+# ==================================
+# Gitignore untuk Proyek Deteksi
+# ==================================
+
+# Lingkungan Virtual & Cache
+.venv/
+.venv-gpu/
+__pycache__/
+.gradio/
+gradio_cached_examples/
+
+# Output dari Sistem Operasi & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Arsip Kode Lama
+_arsip_metode_cnn/
+_arsip_metode_landmark/
+
+<<<<<<< HEAD
+# Dataset & File Hasil Proses
+# Abaikan folder dataset asli yang besar
+data/DAISEE/
+
+# Abaikan SEMUA dataset CNN yang kita generate
+data/cnn_dataset/
+data/cnn_dataset_normal/
+data/cnn_dataset_undersampling/
+data/cnn_dataset_oversampling/
+
+# Abaikan semua file output
+output/
+
+# Abaikan file model yang disimpan
+models/
+
+# Pengecualian: Jangan abaikan file README di dalam folder
+# Berguna untuk memberi instruksi
+!**/README.md
+=======
+# 7. Pengecualian (Opsional tapi Direkomendasikan)
+# ---------------------------------------------
+# Jangan abaikan file README.md di dalam folder yang diabaikan.
+# Ini berguna untuk memberi instruksi (misalnya, cara men-download data).
+!**/README.md.venv-gpu/
+
+# Folder arsip (sudah ada)
+_arsip_metode_cnn/
+_arsip_metode_landmark/
+
+# Cache Gradio (jika ada)
+.gradio/
+gradio_cached_examples/
+
+# Dataset hasil proses baru
+data/cnn_dataset/
+
+# File-file sementara lainnya
+*.csv
+*.joblib
+>>>>>>> 091a565f374eea8ebd84bed906d72b7670a033f5

@@ -1,0 +1,22 @@
+# --- Core & Data Manipulation ---
+pandas
+numpy
+scipy
+
+# --- Image & Video Processing ---
+opencv-python
+mediapipe
+
+# --- Machine Learning & Modeling ---
+scikit-learn
+imbalanced-learn
+xgboost
+joblib
+
+# --- Visualization & UI ---
+matplotlib
+seaborn
+gradio
+
+# --- Utility ---
+tqdm
