@@ -9,6 +9,8 @@ IMG_WIDTH = 224
 BATCH_SIZE = 32
 
 def main():
+    """Fungsi utama untuk memuat model dan mengevaluasinya."""
+    
     print(f"--- Memuat Model dari: {MODEL_PATH} ---")
     if not os.path.exists(MODEL_PATH):
         print("❌ Error: File model tidak ditemukan. Jalankan train_cnn.py terlebih dahulu.")
@@ -31,7 +33,9 @@ def main():
     scenario_name = "oversampling"
     output_dir = os.path.join("output", scenario_name)
     os.makedirs(output_dir, exist_ok=True)
+    
     report_save_path = os.path.join(output_dir, f"evaluation_{scenario_name}.txt")
+
     
     evaluate_and_plot_cm(model, validation_dataset, report_save_path, class_names)
     print(f"\n✅ Evaluasi selesai. Laporan lengkap dan confusion matrix disimpan di folder '{output_dir}'.")
