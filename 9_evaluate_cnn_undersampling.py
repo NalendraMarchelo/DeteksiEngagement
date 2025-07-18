@@ -6,7 +6,7 @@ from utils.models_utils import evaluate_and_plot_cm
 
 SCENARIO_NAME = "undersampling"
 MODEL_NAME = f"cnn_model_{SCENARIO_NAME}.keras"
-DATA_DIR = os.path.join("data", "cnn_dataset_normal", "train")
+DATA_DIR = os.path.join("data", "cnn_dataset_undersampling", "train")
 OUTPUT_DIR = os.path.join("output", SCENARIO_NAME)
 
 MODEL_PATH = os.path.join("models", MODEL_NAME)

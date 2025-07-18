@@ -3,7 +3,7 @@ import os
 from utils.models_utils import evaluate_and_plot_cm
 
 MODEL_PATH = os.path.join("models", "cnn_model_oversampling.keras")
-DATA_DIR = os.path.join("data", "cnn_dataset", "train")
+DATA_DIR = os.path.join("data", "cnn_dataset_normal", "train")
 IMG_HEIGHT = 224
 IMG_WIDTH = 224
 BATCH_SIZE = 32
