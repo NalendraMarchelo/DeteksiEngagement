@@ -1,11 +1,10 @@
-# 8_train_cnn_undersampling.py (Versi Perbaikan)
+# 8_train_cnn_undersampling.py
 
 import tensorflow as tf
 import os
 import argparse
 from utils.models_utils import build_engagement_model, train_model
 
-# --- KONFIGURASI ---
 DATA_DIR = os.path.join("data", "cnn_dataset_undersampling", "train")
 MODEL_SAVE_NAME = "cnn_model_undersampling.keras"
 IMG_HEIGHT = 224
@@ -13,8 +12,6 @@ IMG_WIDTH = 224
 BATCH_SIZE = 32
 
 def main(args):
-    """Melatih model CNN pada dataset hasil undersampling."""
-    
     print("--- Memulai Training CNN Skenario Undersampling ---")
     
     # 1. Memuat Dataset
@@ -28,16 +25,12 @@ def main(args):
         seed=123, image_size=(IMG_HEIGHT, IMG_WIDTH), batch_size=BATCH_SIZE
     )
 
-    # --- PERBAIKAN URUTAN DI SINI ---
-    # Ambil class_names SEBELUM dataset dioptimasi
     class_names = train_dataset.class_names
     print("Kelas yang ditemukan:", class_names)
     
-    # Baru lakukan optimasi performa pada dataset
     AUTOTUNE = tf.data.AUTOTUNE
     train_dataset = train_dataset.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
     validation_dataset = validation_dataset.cache().prefetch(buffer_size=AUTOTUNE)
-    # --------------------------------
 
     # 2. Membangun Model
     model = build_engagement_model(num_classes=len(class_names))

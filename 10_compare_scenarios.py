@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-# --- KONFIGURASI ---
 OUTPUT_DIR = "output"
 SCENARIOS = ["normal", "oversampling", "undersampling"]
 
@@ -14,21 +13,16 @@ def parse_report(filepath):
         with open(filepath, 'r') as f:
             lines = f.readlines()
             
-            # --- PERBAIKAN LOGIKA PARSING DI SINI ---
-            # Mencari baris yang mengandung metrik 'accuracy'
             accuracy_line = next((line for line in lines if 'accuracy' in line), None)
             if accuracy_line:
                 results['accuracy'] = float(accuracy_line.split()[1])
 
-            # Mencari baris yang mengandung metrik untuk kelas '1_bingung'
             bingung_line = next((line for line in lines if '1_bingung' in line), None)
             if bingung_line:
                 parts = bingung_line.split()
-                # Indeks yang benar: [0]Label, [1]Precision, [2]Recall, [3]F1-Score
                 results['precision_bingung'] = float(parts[1])
                 results['recall_bingung'] = float(parts[2])
                 results['f1_score_bingung'] = float(parts[3])
-            # ----------------------------------------
             
         return results
     except (FileNotFoundError, IndexError, ValueError):
@@ -46,12 +40,11 @@ def main():
             all_results.append(result)
 
     if not all_results:
-        print("Tidak ada hasil evaluasi yang bisa dibandingkan. Jalankan skrip evaluasi terlebih dahulu.")
+        print("Tidak ada hasil evaluasi yang bisa dibandingkan.")
         return
 
     # Tampilkan tabel perbandingan
     df_results = pd.DataFrame(all_results)
-    # Ganti nama kolom untuk kejelasan
     df_results.rename(columns={
         'scenario': 'Skenario',
         'accuracy': 'Akurasi Total',
@@ -59,7 +52,6 @@ def main():
         'f1_score_bingung': 'F1-Score (Bingung)'
     }, inplace=True)
 
-    # Pilih kolom yang relevan untuk ditampilkan
     display_columns = ['Skenario', 'Akurasi Total', 'Recall (Bingung)', 'F1-Score (Bingung)']
     df_results = df_results[display_columns]
 

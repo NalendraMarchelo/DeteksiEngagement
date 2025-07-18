@@ -1,12 +1,10 @@
-# 5_train_cnn_normal.py (Versi Perbaikan)
+# 5_train_cnn_normal.py
 
 import tensorflow as tf
 import os
 import argparse
-# Pastikan file utils/models_utils.py ada dan berisi build_engagement_model
 from utils.models_utils import build_engagement_model, train_model 
 
-# --- KONFIGURASI ---
 DATA_DIR = os.path.join("data", "cnn_dataset_normal", "train")
 MODEL_SAVE_NAME = "cnn_model_normal.keras"
 IMG_HEIGHT = 224
@@ -14,8 +12,6 @@ IMG_WIDTH = 224
 BATCH_SIZE = 32
 
 def main(args):
-    """Melatih model CNN pada dataset normal (tidak seimbang)."""
-    
     print("--- Memulai Training CNN Skenario Normal ---")
     
     # 1. Memuat Dataset
@@ -29,19 +25,14 @@ def main(args):
         seed=123, image_size=(IMG_HEIGHT, IMG_WIDTH), batch_size=BATCH_SIZE
     )
 
-    # --- PERBAIKAN URUTAN DI SINI ---
-    # Ambil class_names SEBELUM dataset dioptimasi
     class_names = train_dataset.class_names
     print("Kelas yang ditemukan:", class_names)
     
-    # Baru lakukan optimasi performa pada dataset
     AUTOTUNE = tf.data.AUTOTUNE
     train_dataset = train_dataset.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
     validation_dataset = validation_dataset.cache().prefetch(buffer_size=AUTOTUNE)
-    # --------------------------------
 
     # 2. Membangun Model
-    # Bangun model dengan jumlah kelas yang sudah disimpan
     model = build_engagement_model(num_classes=len(class_names))
     model.summary()
 

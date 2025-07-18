@@ -4,17 +4,14 @@ import tensorflow as tf
 import os
 from utils.models_utils import evaluate_and_plot_cm
 
-# --- KONFIGURASI ---
 MODEL_PATH = os.path.join("models", "cnn_model_normal.keras")
 DATA_DIR = os.path.join("data", "cnn_dataset_normal", "train")
-OUTPUT_DIR = os.path.join("output", "normal") # Simpan di subfolder 'normal'
+OUTPUT_DIR = os.path.join("output", "normal")
 IMG_HEIGHT = 224
 IMG_WIDTH = 224
 BATCH_SIZE = 32
 
 def main():
-    """Mengevaluasi model CNN dari skenario normal."""
-    
     print(f"--- Memuat Model dari: {MODEL_PATH} ---")
     if not os.path.exists(MODEL_PATH):
         print("❌ Error: File model tidak ditemukan.")

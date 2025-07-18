@@ -2,10 +2,8 @@ import tensorflow as tf
 import os
 import argparse
 
-# Pastikan Anda memiliki file ini dari pekerjaan kita sebelumnya
 from utils.models_utils import build_engagement_model
 
-# --- KONFIGURASI ---
 TRAIN_DIR = os.path.join("data", "cnn_dataset_oversampling", "train")
 IMG_HEIGHT = 224
 IMG_WIDTH = 224
@@ -46,9 +44,8 @@ def main(args):
     validation_dataset = validation_dataset.cache().prefetch(buffer_size=AUTOTUNE)
     
     # 2. Membangun Model
-    # Kita panggil kembali fungsi dari utils yang sudah kita perbaiki untuk biner
     print("\nMembangun arsitektur model CNN...")
-    model = build_engagement_model(num_classes=len(class_names)) # Otomatis mendeteksi jumlah kelas (2)
+    model = build_engagement_model(num_classes=len(class_names))
     model.summary()
 
     # 3. Melatih Model

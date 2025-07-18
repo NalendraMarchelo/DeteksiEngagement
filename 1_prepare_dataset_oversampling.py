@@ -3,7 +3,6 @@ import pandas as pd
 import cv2
 from tqdm import tqdm
 
-# --- KONFIGURASI ---
 VIDEO_DIR_BASE = "data/DAISEE/DataSet/Train" 
 LABELS_FILE = "data/DAISEE/Labels/TrainLabels.csv"
 OUTPUT_DIR = os.path.join("data", "cnn_dataset_oversampling")
@@ -22,16 +21,9 @@ def process_videos(df, label_name, frame_interval, base_video_path, base_output_
     for _, row in tqdm(df.iterrows(), total=df.shape[0]):
         video_filename = row['ClipID']
         
-        # --- PERBAIKAN FINAL DI SINI ---
-        # Membangun path yang benar sesuai struktur folder berlapis
-<<<<<<< HEAD
-=======
-        # Contoh: .../Train/110001/1100011002/1100011002.avi
->>>>>>> 091a565f374eea8ebd84bed906d72b7670a033f5
-        person_id_folder = video_filename[:6] # Ambil 6 karakter pertama untuk nama folder orang
-        video_id_folder = os.path.splitext(video_filename)[0] # Ambil nama file tanpa ekstensi
+        person_id_folder = video_filename[:6]
+        video_id_folder = os.path.splitext(video_filename)[0]
         video_path = os.path.join(base_video_path, person_id_folder, video_id_folder, video_filename)
-        # --------------------------------
 
         if not os.path.exists(video_path):
             continue

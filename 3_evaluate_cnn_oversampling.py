@@ -2,7 +2,6 @@ import tensorflow as tf
 import os
 from utils.models_utils import evaluate_and_plot_cm
 
-# --- KONFIGURASI ---
 MODEL_PATH = os.path.join("models", "cnn_model_oversampling.keras")
 DATA_DIR = os.path.join("data", "cnn_dataset", "train")
 IMG_HEIGHT = 224
@@ -16,13 +15,12 @@ def main():
         return
     model = tf.keras.models.load_model(MODEL_PATH)
     
-    # Kita perlu memuat kembali data validasi dengan cara yang sama persis
     print(f"--- Memuat Data Uji/Validasi dari: {DATA_DIR} ---")
     validation_dataset = tf.keras.utils.image_dataset_from_directory(
         DATA_DIR,
         validation_split=0.2,
         subset="validation",
-        seed=123, # Gunakan seed yang sama untuk memastikan datanya identik
+        seed=123,
         image_size=(IMG_HEIGHT, IMG_WIDTH),
         batch_size=BATCH_SIZE
     )
@@ -30,7 +28,6 @@ def main():
     class_names = validation_dataset.class_names
     print(f"Kelas yang akan dievaluasi: {class_names}")
 
-    # Panggil fungsi evaluasi dari utils
     scenario_name = "oversampling"
     output_dir = os.path.join("output", scenario_name)
     os.makedirs(output_dir, exist_ok=True)

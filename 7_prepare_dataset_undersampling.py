@@ -6,7 +6,6 @@ import shutil
 from tqdm import tqdm
 import random
 
-# --- KONFIGURASI ---
 FRAMES_DIR = "data/DAISEE/Frames/Train" 
 LABELS_FILE = "data/DAISEE/Labels/TrainLabels.csv"
 OUTPUT_DIR = os.path.join("data", "cnn_dataset_undersampling", "train") 
@@ -15,7 +14,6 @@ def main():
     """Membuat dataset yang seimbang dengan metode undersampling."""
     print("Memulai persiapan dataset untuk Skenario Undersampling...")
 
-    # Buat direktori output
     output_bingung_dir = os.path.join(OUTPUT_DIR, "1_bingung")
     output_tidak_bingung_dir = os.path.join(OUTPUT_DIR, "0_tidak_bingung")
     os.makedirs(output_bingung_dir, exist_ok=True)

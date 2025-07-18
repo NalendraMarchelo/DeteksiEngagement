@@ -4,10 +4,8 @@ import tensorflow as tf
 import os
 from utils.models_utils import evaluate_and_plot_cm
 
-# --- KONFIGURASI ---
 SCENARIO_NAME = "undersampling"
 MODEL_NAME = f"cnn_model_{SCENARIO_NAME}.keras"
-# Evaluasi tetap dilakukan pada data uji yang distribusinya normal
 DATA_DIR = os.path.join("data", "cnn_dataset_normal", "train")
 OUTPUT_DIR = os.path.join("output", SCENARIO_NAME)
 
@@ -17,8 +15,6 @@ IMG_WIDTH = 224
 BATCH_SIZE = 32
 
 def main():
-    """Mengevaluasi model CNN dari skenario undersampling."""
-    
     print(f"--- Memuat Model dari: {MODEL_PATH} ---")
     if not os.path.exists(MODEL_PATH):
         print(f"❌ Error: File model '{MODEL_PATH}' tidak ditemukan.")
