@@ -4,14 +4,9 @@ import cv2
 from tqdm import tqdm
 
 # --- KONFIGURASI ---
-# Path ke folder yang berisi folder-folder ID orang (misal: 110001, 110002, dst.)
 VIDEO_DIR_BASE = "data/DAISEE/DataSet/Train" 
 LABELS_FILE = "data/DAISEE/Labels/TrainLabels.csv"
-<<<<<<< HEAD
 OUTPUT_DIR = os.path.join("data", "cnn_dataset_oversampling")
-=======
-OUTPUT_DIR = os.path.join("data", "cnn_dataset")
->>>>>>> 091a565f374eea8ebd84bed906d72b7670a033f5
 
 # Interval pengambilan frame
 BINGUNG_INTERVAL = 15      # Ambil 1 frame setiap ~0.5 detik
